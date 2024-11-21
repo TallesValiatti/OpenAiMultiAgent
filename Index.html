@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            overflow: hidden;
+        }
+
+        .calculator-display {
+            background-color: #222;
+            padding: 20px;
+            color: #fff;
+            text-align: right;
+            font-size: 2em;
+        }
+
+        .calculator-display input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 2.5em;
+            text-align: right;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+        }
+
+        .btn {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #c0c0c0;
+        }
+
+        .operator {
+            background-color: #ff8c00;
+            color: white;
+        }
+
+        .operator:hover {
+            background-color: #ffaa00;
+        }
+
+        @media (max-width: 400px) {
+            .calculator {
+                width: 100%;
+                border-radius: 0;
+            }
+
+            .calculator-display {
+                font-size: 1.5em;
+            }
+
+            .btn {
+                padding: 15px;
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="calculator">
+    <div class="calculator-display">
+        <input type="text" id="display" readonly>
+    </div>
+    <div class="calculator-buttons">
+        <button class="btn" value="7">7</button>
+        <button class="btn" value="8">8</button>
+        <button class="btn" value="9">9</button>
+        <button class="btn operator" value="/">÷</button>
+
+        <button class="btn" value="4">4</button>
+        <button class="btn" value="5">5</button>
+        <button class="btn" value="6">6</button>
+        <button class="btn operator" value="*">×</button>
+
+        <button class="btn" value="1">1</button>
+        <button class="btn" value="2">2</button>
+        <button class="btn" value="3">3</button>
+        <button class="btn operator" value="-">−</button>
+
+        <button class="btn" value="0">0</button>
+        <button class="btn operator" value="C">C</button>
+        <button class="btn operator" value="=">=</button>
+        <button class="btn operator" value="+">+</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const display = document.getElementById('display');
+        const buttons = document.querySelectorAll('.btn');
+        let currentInput = '';
+        let operator = '';
+        let firstOperand = null;
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const value = this.value;
+
+                if (value === 'C') {
+                    clearDisplay();
+                } else if (value === '=') {
+                    if (currentInput) {
+                        calculateResult();
+                    }
+                } else if (isOperator(value)) {
+                    if (currentInput) {
+                        if (firstOperand === null) {
+                            firstOperand = parseFloat(currentInput);
+                        } else {
+                            calculateResult();
+                        }
+                        operator = value;
+                        currentInput = '';
+                    }
+                } else {
+                    currentInput += value;
+                    updateDisplay();
+                }
+            });
+        });
+
+        function clearDisplay() {
+            currentInput = '';
+            operator = '';
+            firstOperand = null;
+            updateDisplay();
+        }
+
+        function calculateResult() {
+            const secondOperand = parseFloat(currentInput);
+            let result;
+
+            if (firstOperand !== null && !isNaN(secondOperand)) {
+                switch (operator) {
+                    case '+':
+                        result = firstOperand + secondOperand;
+                        break;
+                    case '-':
+                        result = firstOperand - secondOperand;
+                        break;
+                    case '*':
+                        result = firstOperand * secondOperand;
+                        break;
+                    case '/':
+                        result = firstOperand / secondOperand;
+                        break;
+                    default:
+                        return;
+                }
+                currentInput = result.toString();
+                operator = '';
+                firstOperand = null;
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            display.value = currentInput;
+        }
+
+        function isOperator(value) {
+            return ['+', '-', '*', '/'].includes(value);
+        }
+    });
+</script>
+</body>
+
+</html>
