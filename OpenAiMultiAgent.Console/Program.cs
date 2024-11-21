@@ -3,6 +3,7 @@ using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Chat;
 using Microsoft.SemanticKernel.ChatCompletion;
 using OpenAiMultiAgent.Console;
+#pragma warning disable SKEXP0001
 
 #pragma warning disable SKEXP0110
 
