@@ -22,7 +22,6 @@ ChatCompletionAgent jsAgent = Agents.CreateJsAgent(kernel);
 ChatCompletionAgent techLead = Agents.CreateTechLead(kernel);
 
 KernelFunction webAppTerminateFunction = KernelFunctionFactory.CreateFromPrompt(Constants.WebAppTerminatePrompt);
-
 KernelFunction webAppSelectionFunction = KernelFunctionFactory.CreateFromPrompt(Constants.WebAppSelectionPrompt);
 
 AgentGroupChat webAppChat = new(techLead, htmlAgent, cssAgent, jsAgent)
@@ -52,6 +51,11 @@ webAppChat.AddChatMessage(new ChatMessageContent(AuthorRole.User, webAppPrompt))
 await foreach (var content in webAppChat.InvokeAsync())
 {
     Console.WriteLine();
-    Console.WriteLine($"# {content.Role} - {content.AuthorName ?? "*"}: '{content.Content}'");
+    Console.WriteLine($"-> {content.AuthorName}:");
+    Console.WriteLine();
+    Console.WriteLine($"{content.Content}");
     Console.WriteLine();
 }
+
+var isCompleted = webAppChat.IsComplete ? "YES" : "NO!";
+Console.WriteLine($"Chat with agents was completed? {isCompleted}");
