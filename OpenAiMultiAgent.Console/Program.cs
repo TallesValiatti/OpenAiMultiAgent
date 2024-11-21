@@ -4,12 +4,16 @@ using Microsoft.SemanticKernel.Agents.Chat;
 using Microsoft.SemanticKernel.ChatCompletion;
 using OpenAiMultiAgent.Console;
 #pragma warning disable SKEXP0001
-
 #pragma warning disable SKEXP0110
 
-var model = Environment.GetEnvironmentVariable("OPENAI_MODEL") ?? throw new InvalidOperationException("OPENAI_MODEL environment variable is not set.");
-var endpoint = Environment.GetEnvironmentVariable("OPENAI_ENDPOINT") ?? throw new InvalidOperationException("OPENAI_ENDPOINT environment variable is not set.");
-var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
+var model = Environment.GetEnvironmentVariable("OPENAI_MODEL") 
+            ?? throw new InvalidOperationException("OPENAI_MODEL environment variable is not set.");
+
+var endpoint = Environment.GetEnvironmentVariable("OPENAI_ENDPOINT")
+               ?? throw new InvalidOperationException("OPENAI_ENDPOINT environment variable is not set.");
+
+var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
+             ?? throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
 
 // Create a kernel with Azure OpenAI chat completion
 var kernel = Kernel
@@ -45,7 +49,13 @@ AgentGroupChat webAppChat = new(techLead, htmlAgent, cssAgent, jsAgent)
 };
 
 string webAppPrompt = """"
-                      Create a beautiful calculator with a modern and user-friendly interface. The calculator should support basic arithmetic operations (addition, subtraction, multiplication, division) and have a responsive design that works well on both desktop and mobile devices.
+                      Create a beautiful calculator with a modern and user-friendly interface. The calculator should:
+                      - Support basic arithmetic operations (addition, subtraction, multiplication, division).
+                      - Have a responsive design that works well on both desktop and mobile devices.
+                      - Feature number buttons in blue, arranged in a grid format like a regular calculator, with numbers 1 to 9 and 0 at the bottom center.
+                      - Use orange for arithmetic operation buttons, grouped together for easy access.
+                      - Use red for all other buttons (e.g., equals, clear), placed logically to complement the layout.
+                      - Ensure all related buttons are ordered and grouped together, providing a consistent and intuitive user experience.
                       """";
 
 webAppChat.AddChatMessage(new ChatMessageContent(AuthorRole.User, webAppPrompt));
